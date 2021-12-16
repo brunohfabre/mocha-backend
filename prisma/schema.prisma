@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
-  firstName String
-  lastName  String
-  email     String @unique
-  password  String
-  phone     Int    @unique
+  id         String @id @default(uuid())
+  first_name String
+  last_name  String
+  email      String @unique
+  password   String
+  phone      Int    @unique
+  github_id  String @unique
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
