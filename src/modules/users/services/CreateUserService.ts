@@ -12,7 +12,7 @@ interface IRequest {
   phone: string;
 }
 
-export class CreateUserService {
+class CreateUserService {
   public async execute({
     first_name,
     last_name,
@@ -52,3 +52,5 @@ export class CreateUserService {
     return user;
   }
 }
+
+export default new CreateUserService();

@@ -2,12 +2,11 @@ import { Router } from 'express';
 
 import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticated';
 
-import { SessionsController } from '../controllers/SessionsController';
+import SessionsController from '../controllers/SessionsController';
 
 const sessionsRouter = Router();
-const sessionsController = new SessionsController();
 
-sessionsRouter.get('/', ensureAuthenticated, sessionsController.show);
-sessionsRouter.post('/', sessionsController.create);
+sessionsRouter.get('/', ensureAuthenticated, SessionsController.show);
+sessionsRouter.post('/', SessionsController.create);
 
 export { sessionsRouter };

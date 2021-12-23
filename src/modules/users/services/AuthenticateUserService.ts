@@ -17,7 +17,7 @@ interface IResponse {
   token: string;
 }
 
-export class AuthenticateUserService {
+class AuthenticateUserService {
   public async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await prisma.user.findUnique({
       where: {
@@ -48,3 +48,5 @@ export class AuthenticateUserService {
     };
   }
 }
+
+export default new AuthenticateUserService();

@@ -3,9 +3,9 @@ import { Request, Response } from 'express';
 import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
-import { AuthenticateUserService } from '../services/AuthenticateUserService';
+import AuthenticateUserService from '../services/AuthenticateUserService';
 
-export class SessionsController {
+class SessionsController {
   public async show(request: Request, response: Response): Promise<Response> {
     const { user_id } = request;
 
@@ -25,9 +25,10 @@ export class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
-    const authenticateUser = new AuthenticateUserService();
-
-    const { user, token } = await authenticateUser.execute({ email, password });
+    const { user, token } = await AuthenticateUserService.execute({
+      email,
+      password,
+    });
 
     const userWithoutPassword = {
       id: user.id,
@@ -39,3 +40,5 @@ export class SessionsController {
     return response.json({ user: userWithoutPassword, token });
   }
 }
+
+export default new SessionsController();
