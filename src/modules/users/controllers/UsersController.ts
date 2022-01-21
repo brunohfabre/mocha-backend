@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 
-import CreateUserService from '../services/CreateUserService';
+import { CreateUserService } from '../services/CreateUserService';
 
-class UsersController {
-  public async create(request: Request, response: Response): Promise<Response> {
+export class UsersController {
+  static async create(request: Request, response: Response): Promise<Response> {
     const { first_name, last_name, email, password, phone } = request.body;
 
     const user = await CreateUserService.execute({
@@ -24,5 +24,3 @@ class UsersController {
     return response.json(userWithoutPassword);
   }
 }
-
-export default new UsersController();

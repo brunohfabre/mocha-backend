@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
-import AuthenticateUserService from '../services/AuthenticateUserService';
+import { AuthenticateUserService } from '../services/AuthenticateUserService';
 
-class SessionsController {
-  public async show(request: Request, response: Response): Promise<Response> {
+export class SessionsController {
+  static async show(request: Request, response: Response): Promise<Response> {
     const { user_id } = request;
 
     if (!user_id) {
@@ -22,7 +22,7 @@ class SessionsController {
     return response.json(user);
   }
 
-  public async create(request: Request, response: Response): Promise<Response> {
+  static async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
     const { user, token } = await AuthenticateUserService.execute({
@@ -40,5 +40,3 @@ class SessionsController {
     return response.json({ user: userWithoutPassword, token });
   }
 }
-
-export default new SessionsController();

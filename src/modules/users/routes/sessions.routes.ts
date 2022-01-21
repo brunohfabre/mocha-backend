@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticated';
 
-import SessionsController from '../controllers/SessionsController';
+import { SessionsController } from '../controllers/SessionsController';
 
 const sessionsRouter = Router();
 
