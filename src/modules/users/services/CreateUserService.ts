@@ -46,6 +46,11 @@ export class CreateUserService {
         email,
         password: hashedPassword,
         phone,
+        projects: {
+          create: {
+            title: 'default',
+          },
+        },
       },
     });
 
