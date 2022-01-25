@@ -54,4 +54,38 @@ export class ConnectionsController {
 
     return response.json(connection);
   }
+
+  static async delete(request: Request, response: Response): Promise<Response> {
+    const { user_id } = request;
+    const { id } = request.params;
+
+    const connectionExists = await prisma.connection.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!connectionExists) {
+      throw new AppError('Connection do not exists.');
+    }
+
+    const projectExists = await prisma.project.findFirst({
+      where: {
+        id: connectionExists.project_id,
+        user_id,
+      },
+    });
+
+    if (!projectExists) {
+      throw new AppError('Project do not exists.');
+    }
+
+    await prisma.connection.delete({
+      where: {
+        id,
+      },
+    });
+
+    return response.json({ id });
+  }
 }

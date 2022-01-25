@@ -6,5 +6,6 @@ const connectionsRouter = Router();
 
 connectionsRouter.get('/', ConnectionsController.index);
 connectionsRouter.post('/', ConnectionsController.create);
+connectionsRouter.delete('/:id', ConnectionsController.delete);
 
 export { connectionsRouter };
