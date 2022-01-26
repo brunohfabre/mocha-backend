@@ -3,6 +3,9 @@ import { Request, Response } from 'express';
 import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
+import { CreateConnectionService } from '../services/CreateConnectionService';
+import { DeleteConnectionService } from '../services/DeleteConnectionService';
+
 export class ConnectionsController {
   static async index(request: Request, response: Response): Promise<Response> {
     const { user_id } = request;
@@ -30,26 +33,14 @@ export class ConnectionsController {
     const { user_id } = request;
     const { type, name, host, port, user, password } = request.body;
 
-    const projectExists = await prisma.project.findFirst({
-      where: {
-        user_id,
-      },
-    });
-
-    if (!projectExists) {
-      throw new AppError('Project do not exists');
-    }
-
-    const connection = await prisma.connection.create({
-      data: {
-        type,
-        name,
-        host,
-        port,
-        user,
-        password,
-        project_id: projectExists.id,
-      },
+    const connection = await CreateConnectionService.execute({
+      user_id,
+      type,
+      name,
+      host,
+      port,
+      user,
+      password,
     });
 
     return response.json(connection);
@@ -59,32 +50,7 @@ export class ConnectionsController {
     const { user_id } = request;
     const { id } = request.params;
 
-    const connectionExists = await prisma.connection.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!connectionExists) {
-      throw new AppError('Connection do not exists.');
-    }
-
-    const projectExists = await prisma.project.findFirst({
-      where: {
-        id: connectionExists.project_id,
-        user_id,
-      },
-    });
-
-    if (!projectExists) {
-      throw new AppError('Project do not exists.');
-    }
-
-    await prisma.connection.delete({
-      where: {
-        id,
-      },
-    });
+    await DeleteConnectionService.execute({ user_id, id });
 
     return response.json({ id });
   }
