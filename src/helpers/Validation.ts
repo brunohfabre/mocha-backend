@@ -20,7 +20,7 @@ export class Validation {
           errors[error.path] = error.message;
         });
 
-        return response.status(404).json({
+        return response.status(406).json({
           status: 'validation_error',
           errors,
         });

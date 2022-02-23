@@ -1,0 +1,34 @@
+{
+  "url": "/api/testvalidation",
+  "method": "POST",
+  "data": [
+    {
+      "body": [
+        {
+          "name": "firstName",
+          "type": "string",
+          "required": true,
+          "nullable": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "authorization",
+          "type": "string",
+          "required": true,
+          "nullable": false
+        }
+      ],
+      "query": [
+        {
+          "name": "page",
+          "type": "number",
+          "required": true,
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}
+
+

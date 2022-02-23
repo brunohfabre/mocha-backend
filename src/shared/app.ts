@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
+import { ValidationError } from 'yup';
 
 import { AppError } from './errors/AppError';
 import { routes } from './routes';
