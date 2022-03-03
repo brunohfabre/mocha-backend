@@ -4,6 +4,8 @@ import { resolve } from 'path';
 import { ObjectSchema, ValidationError } from 'yup';
 import { ObjectShape } from 'yup/lib/object';
 
+type Segment = 'body' | 'headers' | 'query';
+
 export const Segments = {
   BODY: 'body',
   HEADERS: 'headers',
@@ -36,159 +38,83 @@ export function validationMiddleware(data: Data) {
     let validationErrors = {};
     let validationData = {};
 
-    if (data.body) {
-      try {
-        const { fields } = data.body;
+    const { isdocsrequest } = request.headers;
 
-        const bodyFields: SegmentField[] = [];
+    const segments = Object.keys(Segments);
 
-        Object.keys(fields).forEach(item => {
-          const field = fields[item] as Field;
+    for (const segmentItem of segments) {
+      const segment: Segment = Segments[
+        segmentItem as 'BODY' | 'HEADERS' | 'QUERY'
+      ] as Segment;
 
-          bodyFields.push({
-            name: item,
-            type: field.type,
-            required: field.spec.presence === 'required',
-            nullable: field.spec.nullable,
-          });
-        });
+      if (isdocsrequest) {
+        const fields = data[segment]?.fields;
 
-        validationData = {
-          ...validationData,
-          body: bodyFields,
-        };
+        if (fields && Object.keys(fields).length > 0) {
+          const segmentFields: SegmentField[] = [];
 
-        await data.body.validate(request.body, {
-          abortEarly: false,
-        });
-      } catch (err) {
-        if (err instanceof ValidationError) {
-          const errors: { [key: string]: string } = {};
+          Object.keys(fields).forEach(item => {
+            const field = fields[item] as Field;
 
-          err.inner.forEach(error => {
-            if (error.path) {
-              errors[error.path] = error.message;
-            }
+            segmentFields.push({
+              name: item,
+              type: field.type,
+              required: field.spec.presence === 'required',
+              nullable: field.spec.nullable,
+            });
           });
 
-          validationErrors = {
-            ...validationErrors,
-            body: errors,
+          validationData = {
+            ...validationData,
+            [segment]: segmentFields,
           };
+        }
+      } else {
+        try {
+          await data[segment]?.validate(request[segment], {
+            abortEarly: false,
+          });
+        } catch (err) {
+          if (err instanceof ValidationError) {
+            const errors: { [key: string]: string } = {};
+            err.inner.forEach(error => {
+              if (error.path) {
+                errors[error.path] = error.message;
+              }
+            });
+            validationErrors = {
+              ...validationErrors,
+              [segment]: errors,
+            };
+          }
         }
       }
     }
 
-    if (data.headers) {
-      try {
-        const { fields } = data.headers;
+    if (isdocsrequest) {
+      const file = fs.readFileSync(
+        resolve(__dirname, '..', '..', 'docs', 'docs.json'),
+        {
+          encoding: 'utf8',
+        },
+      );
 
-        const headersFields: SegmentField[] = [];
+      const fileData = JSON.parse(file);
 
-        Object.keys(fields).forEach(item => {
-          const field = fields[item] as Field;
-
-          headersFields.push({
-            name: item,
-            type: field.type,
-            required: field.spec.presence === 'required',
-            nullable: field.spec.nullable,
-          });
-        });
-
-        validationData = {
-          ...validationData,
-          headers: headersFields,
-        };
-
-        await data.headers.validate(request.headers, {
-          abortEarly: false,
-        });
-      } catch (err) {
-        if (err instanceof ValidationError) {
-          const errors: { [key: string]: string } = {};
-
-          err.inner.forEach(error => {
-            if (error.path) {
-              errors[error.path] = error.message;
-            }
-          });
-
-          validationErrors = {
-            ...validationErrors,
-            headers: errors,
-          };
-        }
-      }
-    }
-
-    if (data.query) {
-      try {
-        const { fields } = data.query;
-
-        const queryFields: SegmentField[] = [];
-
-        Object.keys(fields).forEach(item => {
-          const field = fields[item] as Field;
-
-          queryFields.push({
-            name: item,
-            type: field.type,
-            required: field.spec.presence === 'required',
-            nullable: field.spec.nullable,
-          });
-        });
-
-        validationData = {
-          ...validationData,
-          query: queryFields,
-        };
-
-        await data.query.validate(request.query, {
-          abortEarly: false,
-        });
-      } catch (err) {
-        if (err instanceof ValidationError) {
-          const errors: { [key: string]: string } = {};
-
-          err.inner.forEach(error => {
-            if (error.path) {
-              errors[error.path] = error.message;
-            }
-          });
-
-          validationErrors = {
-            ...validationErrors,
-            query: errors,
-          };
-        }
-      }
-    }
-
-    const file = fs.readFileSync(
-      resolve(__dirname, '..', '..', 'docs', 'docs.json'),
-      {
-        encoding: 'utf8',
-      },
-    );
-
-    const newData = JSON.parse(file);
-
-    newData.push(validationData);
-
-    fs.writeFileSync(
-      resolve(__dirname, '..', '..', 'docs', 'docs.json'),
-      JSON.stringify({
+      fileData.push({
         url: request.originalUrl,
         method: request.method,
-        data: newData,
-      }),
-      {
-        encoding: 'utf8',
-      },
-    );
+        data: validationData,
+      });
 
-    if (Object.keys(validationErrors).length) {
+      fs.writeFileSync(
+        resolve(__dirname, '..', '..', 'docs', 'docs.json'),
+        JSON.stringify(fileData),
+        {
+          encoding: 'utf8',
+        },
+      );
+    } else if (Object.keys(validationErrors).length) {
       return response
         .status(406)
         .json({ status: 'validation_error', data: validationErrors });

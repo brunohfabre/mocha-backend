@@ -1,5 +1,7 @@
 import axios, { Method } from 'axios';
 import listEndpoints from 'express-list-endpoints';
+import { promises as fs } from 'fs';
+import { resolve } from 'path';
 
 import { app } from '@shared/app';
 
@@ -24,6 +26,10 @@ routes.forEach(route => {
 });
 
 async function runDocs(): Promise<void> {
+  await fs.writeFile(resolve(__dirname, 'docs.json'), '[]', {
+    encoding: 'utf8',
+  });
+
   const user = await AuthenticateUserService.execute({
     email: 'bruno.hfabre@gmail.com',
     password: 'abcd1234',
@@ -37,6 +43,7 @@ async function runDocs(): Promise<void> {
           url: `http://localhost:3333${route.path}`,
           headers: {
             authorization: `Bearer ${user.token}`,
+            isdocsrequest: true,
           },
         });
       } catch (err: any) {
