@@ -11,36 +11,32 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
-  first_name String
-  last_name  String
-  email      String    @unique
-  password   String
-  phone      String    @unique
-  github_id  String?   @unique
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String  @unique
+  password  String
+  phone     String  @unique
+  githubId  String? @unique
 
-  projects   Project[]
+  projects Project[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
-  @@map("users")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Project {
-  id          String       @id @default(uuid())
-  title       String
+  id    String @id @default(uuid())
+  title String
 
-  user_id     String
-  user        User         @relation(fields: [user_id], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   connections Connection[]
   notes       Note[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
-  @@map("projects")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 enum ConnectionType {
@@ -58,25 +54,21 @@ model Connection {
   password String
   type     ConnectionType
 
-  project_id String
-  project    Project @relation(fields: [project_id], references: [id])
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
-  @@map("connections")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Note {
-  id         String  @id @default(uuid())
-  title      String
-  content    String
+  id      String @id @default(uuid())
+  title   String
+  content String
 
-  project_id String
-  project    Project @relation(fields: [project_id], references: [id])
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
-  @@map("notes")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

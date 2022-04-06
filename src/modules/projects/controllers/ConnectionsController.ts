@@ -8,11 +8,11 @@ import { DeleteConnectionService } from '../services/DeleteConnectionService';
 
 export class ConnectionsController {
   static async index(request: Request, response: Response): Promise<Response> {
-    const { user_id } = request;
+    const { userId } = request;
 
     const projectExists = await prisma.project.findFirst({
       where: {
-        user_id,
+        userId,
       },
     });
 
@@ -22,7 +22,7 @@ export class ConnectionsController {
 
     const connections = await prisma.connection.findMany({
       where: {
-        project_id: projectExists.id,
+        projectId: projectExists.id,
       },
     });
 
@@ -30,11 +30,11 @@ export class ConnectionsController {
   }
 
   static async create(request: Request, response: Response): Promise<Response> {
-    const { user_id } = request;
+    const { userId } = request;
     const { type, name, host, port, user, password } = request.body;
 
     const connection = await CreateConnectionService.execute({
-      user_id,
+      userId,
       type,
       name,
       host,
@@ -47,10 +47,10 @@ export class ConnectionsController {
   }
 
   static async delete(request: Request, response: Response): Promise<Response> {
-    const { user_id } = request;
+    const { userId } = request;
     const { id } = request.params;
 
-    await DeleteConnectionService.execute({ user_id, id });
+    await DeleteConnectionService.execute({ userId, id });
 
     return response.json({ id });
   }

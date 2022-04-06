@@ -4,7 +4,7 @@ import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 interface IRequest {
-  user_id: string;
+  userId: string;
   type: ConnectionType;
   name: string;
   host: string;
@@ -15,7 +15,7 @@ interface IRequest {
 
 export class CreateConnectionService {
   static async execute({
-    user_id,
+    userId,
     type,
     name,
     host,
@@ -25,7 +25,7 @@ export class CreateConnectionService {
   }: IRequest): Promise<Connection> {
     const projectExists = await prisma.project.findFirst({
       where: {
-        user_id,
+        userId,
       },
     });
 
@@ -41,7 +41,7 @@ export class CreateConnectionService {
         port,
         user,
         password,
-        project_id: projectExists.id,
+        projectId: projectExists.id,
       },
     });
 

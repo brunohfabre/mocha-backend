@@ -1,15 +1,23 @@
 import { Router } from 'express';
+import { object, string } from 'yup';
 
-import { Validation } from '@helpers/Validation';
+import { Segments, validationMiddleware } from '@shared/middlewares/validation';
 
 import { UsersController } from '../controllers/UsersController';
-import { createUserDTO } from '../dtos/createUserDTO';
 
 const usersRouter = Router();
 
 usersRouter.post(
   '/',
-  Validation.validateBody(createUserDTO),
+  validationMiddleware({
+    [Segments.BODY]: object({
+      firstName: string().required(),
+      lastName: string().required(),
+      phone: string().required(),
+      email: string().required().email(),
+      password: string().required(),
+    }),
+  }),
   UsersController.create,
 );
 

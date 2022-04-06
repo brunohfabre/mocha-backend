@@ -5,8 +5,8 @@ import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 interface IRequest {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phone: string;
@@ -14,8 +14,8 @@ interface IRequest {
 
 export class CreateUserService {
   static async execute({
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     email,
     password,
     phone,
@@ -41,8 +41,8 @@ export class CreateUserService {
 
     const user = await prisma.user.create({
       data: {
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
         phone,

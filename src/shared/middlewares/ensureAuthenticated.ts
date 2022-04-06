@@ -29,7 +29,7 @@ export function ensureAuthenticated(
 
     const { sub } = decoded as ITokenPayload;
 
-    request.user_id = sub;
+    request.userId = sub;
 
     return next();
   } catch (err) {

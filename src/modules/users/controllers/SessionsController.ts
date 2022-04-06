@@ -7,15 +7,15 @@ import { AuthenticateUserService } from '../services/AuthenticateUserService';
 
 export class SessionsController {
   static async show(request: Request, response: Response): Promise<Response> {
-    const { user_id } = request;
+    const { userId } = request;
 
-    if (!user_id) {
+    if (!userId) {
       throw new AppError('Token is missing to fetch user data.');
     }
 
     const user = await prisma.user.findUnique({
       where: {
-        id: user_id,
+        id: userId,
       },
     });
 
@@ -32,8 +32,8 @@ export class SessionsController {
 
     const userWithoutPassword = {
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       phone: user.phone,
     };

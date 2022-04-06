@@ -7,16 +7,16 @@ export class UsersController {
     const { firstName, lastName, email, password, phone } = request.body;
 
     const user = await CreateUserService.execute({
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
       email,
       password,
       phone,
     });
 
     const userWithoutPassword = {
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: user.firstName,
+      last_name: user.lastName,
       email: user.email,
       phone: user.phone,
     };
