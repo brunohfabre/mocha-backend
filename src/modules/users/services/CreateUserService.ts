@@ -20,7 +20,7 @@ export class CreateUserService {
     password,
     phone,
   }: IRequest): Promise<User> {
-    const checkUserExists = await prisma.user.findFirst({
+    const userExists = await prisma.user.findFirst({
       where: {
         OR: [
           {
@@ -33,7 +33,7 @@ export class CreateUserService {
       },
     });
 
-    if (checkUserExists) {
+    if (userExists) {
       throw new AppError('Email address or phone already used.');
     }
 
@@ -48,7 +48,7 @@ export class CreateUserService {
         phone,
         projects: {
           create: {
-            title: 'default',
+            title: 'personal',
           },
         },
       },

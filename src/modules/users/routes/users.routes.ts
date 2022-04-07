@@ -21,4 +21,17 @@ usersRouter.post(
   UsersController.create,
 );
 
+usersRouter.put(
+  '/:id',
+  validationMiddleware({
+    [Segments.BODY]: object({
+      firstName: string(),
+      lastName: string(),
+      phone: string(),
+      email: string().email(),
+    }),
+  }),
+  UsersController.update,
+);
+
 export { usersRouter };
