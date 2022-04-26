@@ -11,6 +11,7 @@ interface IRequest {
   port: number;
   user: string;
   password: string;
+  projectId: string;
 }
 
 export class CreateConnectionService {
@@ -22,6 +23,7 @@ export class CreateConnectionService {
     port,
     user,
     password,
+    projectId,
   }: IRequest): Promise<Connection> {
     const projectExists = await prisma.project.findFirst({
       where: {
@@ -41,7 +43,7 @@ export class CreateConnectionService {
         port,
         user,
         password,
-        projectId: projectExists.id,
+        projectId,
       },
     });
 

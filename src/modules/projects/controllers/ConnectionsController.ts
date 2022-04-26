@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 import { CreateConnectionService } from '../services/CreateConnectionService';
@@ -8,21 +7,9 @@ import { DeleteConnectionService } from '../services/DeleteConnectionService';
 
 export class ConnectionsController {
   static async index(request: Request, response: Response): Promise<Response> {
-    const { userId } = request;
-
-    const projectExists = await prisma.project.findFirst({
-      where: {
-        userId,
-      },
-    });
-
-    if (!projectExists) {
-      throw new AppError('Project do not exists');
-    }
-
     const connections = await prisma.connection.findMany({
       where: {
-        projectId: projectExists.id,
+        projectId: String(request.headers['x-project-selected']),
       },
     });
 
@@ -41,6 +28,7 @@ export class ConnectionsController {
       port,
       user,
       password,
+      projectId: String(request.headers['x-project-selected']),
     });
 
     return response.json(connection);
