@@ -25,9 +25,9 @@ const routes = Router();
 //   }),
 // };
 
-routes.get('/docs', (request, response) => {
-  return response.json(require('../../docs/docs.json'));
-});
+// routes.get('/docs', (request, response) => {
+//   return response.json(require('../../docs/docs.json'));
+// });
 
 routes.use('/users', usersRouter);
 routes.use('/sessions', sessionsRouter);
@@ -35,11 +35,11 @@ routes.use('/sessions', sessionsRouter);
 routes.use(ensureAuthenticated);
 
 routes.get('/invites', async (request, response) => {
-  const { userId } = request;
+  const { user_id } = request;
 
   const invites = await prisma.invite.findMany({
     where: {
-      toId: userId,
+      to_id: user_id,
       accepted: false,
     },
   });
@@ -48,13 +48,13 @@ routes.get('/invites', async (request, response) => {
 });
 
 routes.post('/invites', async (request, response) => {
-  const { userId } = request;
+  const { user_id } = request;
   const { to } = request.body;
 
   const invite = await prisma.invite.create({
     data: {
-      fromId: userId,
-      toId: to,
+      from_id: user_id,
+      to_id: to,
     },
   });
 
@@ -62,7 +62,7 @@ routes.post('/invites', async (request, response) => {
 });
 
 routes.put('/invites/:id', async (request, response) => {
-  const { userId } = request;
+  const { user_id } = request;
   const { id } = request.params;
 
   // const invite = await prisma.invite.findFirst({
@@ -87,12 +87,12 @@ routes.put('/invites/:id', async (request, response) => {
   await prisma.contact.createMany({
     data: [
       {
-        userId,
-        contactId: invite.fromId,
+        user_id,
+        contact_id: invite.from_id,
       },
       {
-        userId: invite.fromId,
-        contactId: userId,
+        user_id: invite.from_id,
+        contact_id: user_id,
       },
     ],
   });
@@ -101,22 +101,22 @@ routes.put('/invites/:id', async (request, response) => {
 });
 
 routes.get('/contacts', async (request, response) => {
-  const { userId } = request;
+  const { user_id } = request;
 
   const contacts = await prisma.contact.findMany({
     where: {
-      userId,
+      user_id,
     },
     select: {
       id: true,
       contact: {
         select: {
           id: true,
-          firstName: true,
-          lastName: true,
+          first_name: true,
+          last_name: true,
           email: true,
           phone: true,
-          githubId: true,
+          github_id: true,
         },
       },
     },

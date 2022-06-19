@@ -7,16 +7,16 @@ import { DeleteProjectService } from '../services/DeleteProjectService';
 
 export class ProjectsController {
   static async index(request: Request, response: Response): Promise<Response> {
-    const { userId } = request;
+    const { user_id } = request;
 
     const projects = await prisma.project.findMany({
       where: {
-        userId,
+        user_id,
       },
       select: {
         id: true,
         title: true,
-        createdAt: true,
+        created_at: true,
       },
     });
 
@@ -24,10 +24,10 @@ export class ProjectsController {
   }
 
   static async create(request: Request, response: Response): Promise<Response> {
-    const { userId } = request;
+    const { user_id } = request;
     const { title } = request.body;
 
-    const project = await CreateProjectService.execute({ userId, title });
+    const project = await CreateProjectService.execute({ user_id, title });
 
     return response.json(project);
   }

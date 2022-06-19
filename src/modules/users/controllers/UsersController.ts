@@ -5,19 +5,19 @@ import { UpdateUserService } from '../services/UpdateUserService';
 
 export class UsersController {
   static async create(request: Request, response: Response): Promise<Response> {
-    const { firstName, lastName, email, password, phone } = request.body;
+    const { first_name, last_name, email, password, phone } = request.body;
 
     const user = await CreateUserService.execute({
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       password,
       phone,
     });
 
     const userWithoutPassword = {
-      first_name: user.firstName,
-      last_name: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       phone: user.phone,
     };
@@ -27,19 +27,19 @@ export class UsersController {
 
   static async update(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    const { firstName, lastName, email, phone } = request.body;
+    const { first_name, last_name, email, phone } = request.body;
 
     const user = await UpdateUserService.execute({
       id,
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       phone,
     });
 
     const userWithoutPassword = {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       phone: user.phone,
     };

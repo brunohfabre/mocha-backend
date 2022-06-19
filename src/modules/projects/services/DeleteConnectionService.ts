@@ -2,12 +2,12 @@ import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 interface IRequest {
-  userId: string;
+  user_id: string;
   id: string;
 }
 
 export class DeleteConnectionService {
-  static async execute({ userId, id }: IRequest): Promise<void> {
+  static async execute({ user_id, id }: IRequest): Promise<void> {
     const connectionExists = await prisma.connection.findFirst({
       where: {
         id,
@@ -20,8 +20,8 @@ export class DeleteConnectionService {
 
     const projectExists = await prisma.project.findFirst({
       where: {
-        id: connectionExists.projectId,
-        userId,
+        id: connectionExists.project_id,
+        user_id,
       },
     });
 

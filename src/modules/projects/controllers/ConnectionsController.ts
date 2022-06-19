@@ -9,7 +9,7 @@ export class ConnectionsController {
   static async index(request: Request, response: Response): Promise<Response> {
     const connections = await prisma.connection.findMany({
       where: {
-        projectId: String(request.headers['x-project-selected']),
+        project_id: String(request.headers['x-project-selected']),
       },
     });
 
@@ -17,28 +17,28 @@ export class ConnectionsController {
   }
 
   static async create(request: Request, response: Response): Promise<Response> {
-    const { userId } = request;
+    const { user_id } = request;
     const { type, name, host, port, user, password } = request.body;
 
     const connection = await CreateConnectionService.execute({
-      userId,
+      user_id,
       type,
       name,
       host,
       port,
       user,
       password,
-      projectId: String(request.headers['x-project-selected']),
+      project_id: String(request.headers['x-project-selected']),
     });
 
     return response.json(connection);
   }
 
   static async delete(request: Request, response: Response): Promise<Response> {
-    const { userId } = request;
+    const { user_id } = request;
     const { id } = request.params;
 
-    await DeleteConnectionService.execute({ userId, id });
+    await DeleteConnectionService.execute({ user_id, id });
 
     return response.json({ id });
   }

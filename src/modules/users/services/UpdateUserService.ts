@@ -3,15 +3,15 @@ import { prisma } from '@shared/prisma';
 
 type IRequest = {
   id: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
 };
 
 export class UpdateUserService {
   static async execute(data: IRequest) {
-    const { id, firstName, lastName, email, phone } = data;
+    const { id, first_name, last_name, email, phone } = data;
 
     const userExists = await prisma.user.findUnique({
       where: {
@@ -28,8 +28,8 @@ export class UpdateUserService {
         id,
       },
       data: {
-        firstName,
-        lastName,
+        first_name,
+        last_name,
         email,
         phone,
       },

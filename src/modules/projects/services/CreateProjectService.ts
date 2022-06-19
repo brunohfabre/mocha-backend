@@ -2,22 +2,22 @@ import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 interface IRequest {
-  userId: string;
+  user_id: string;
   title: string;
 }
 
 interface IResponse {
   id: string;
   title: string;
-  createdAt: Date;
+  created_at: Date;
 }
 
 export class CreateProjectService {
-  static async execute({ userId, title }: IRequest): Promise<IResponse> {
+  static async execute({ user_id, title }: IRequest): Promise<IResponse> {
     const projectWithSameName = await prisma.project.findFirst({
       where: {
         title,
-        userId,
+        user_id,
       },
     });
 
@@ -28,12 +28,12 @@ export class CreateProjectService {
     const project = await prisma.project.create({
       data: {
         title,
-        userId,
+        user_id,
       },
       select: {
         id: true,
         title: true,
-        createdAt: true,
+        created_at: true,
       },
     });
 
