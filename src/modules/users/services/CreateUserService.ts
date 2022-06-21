@@ -49,6 +49,7 @@ export class CreateUserService {
         projects: {
           create: {
             title: 'personal',
+            is_default: true,
           },
         },
       },

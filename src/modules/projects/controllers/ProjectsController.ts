@@ -17,6 +17,7 @@ export class ProjectsController {
         id: true,
         title: true,
         created_at: true,
+        is_default: true,
       },
     });
 

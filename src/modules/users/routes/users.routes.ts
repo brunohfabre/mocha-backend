@@ -11,8 +11,8 @@ usersRouter.post(
   '/',
   validationMiddleware({
     [Segments.BODY]: object({
-      firstName: string().required(),
-      lastName: string().required(),
+      first_name: string().required(),
+      last_name: string().required(),
       phone: string().required(),
       email: string().required().email(),
       password: string().required(),
@@ -25,8 +25,8 @@ usersRouter.put(
   '/:id',
   validationMiddleware({
     [Segments.BODY]: object({
-      firstName: string(),
-      lastName: string(),
+      first_name: string(),
+      last_name: string(),
       phone: string(),
       email: string().email(),
     }),
