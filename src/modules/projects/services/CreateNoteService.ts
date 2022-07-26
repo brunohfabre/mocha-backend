@@ -1,30 +1,22 @@
-import { Connection, ConnectionType } from '@prisma/client';
+import { Note } from '@prisma/client';
 
 import { AppError } from '@shared/errors/AppError';
 import { prisma } from '@shared/prisma';
 
 interface IRequest {
   user_id: string;
-  type: ConnectionType;
-  name: string;
-  host: string;
-  port: number;
-  user: string;
-  password: string;
+  title: string;
+  content: string;
   project_id: string;
 }
 
-export class CreateConnectionService {
+export class CreateNoteService {
   static async execute({
     user_id,
-    type,
-    name,
-    host,
-    port,
-    user,
-    password,
+    title,
+    content,
     project_id,
-  }: IRequest): Promise<Connection> {
+  }: IRequest): Promise<Note> {
     const projectExists = await prisma.project.findFirst({
       where: {
         user_id,
@@ -36,18 +28,14 @@ export class CreateConnectionService {
       throw new AppError('Project do not exists');
     }
 
-    const connection = await prisma.connection.create({
+    const note = await prisma.note.create({
       data: {
-        type,
-        name,
-        host,
-        port,
-        user,
-        password,
+        title,
+        content,
         project_id,
       },
     });
 
-    return connection;
+    return note;
   }
 }

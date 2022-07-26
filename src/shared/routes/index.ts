@@ -4,6 +4,7 @@ import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticated';
 import { prisma } from '@shared/prisma';
 
 import { connectionsRouter } from '@modules/projects/routes/connections.routes';
+import { notesRouter } from '@modules/projects/routes/notes.routes';
 import { projectsRouter } from '@modules/projects/routes/projects.routes';
 import { sessionsRouter } from '@modules/users/routes/sessions.routes';
 import { usersRouter } from '@modules/users/routes/users.routes';
@@ -125,7 +126,8 @@ routes.get('/contacts', async (request, response) => {
   return response.json(contacts);
 });
 
-routes.use('/connections', connectionsRouter);
 routes.use('/projects', projectsRouter);
+routes.use('/connections', connectionsRouter);
+routes.use('/notes', notesRouter);
 
 export { routes };
