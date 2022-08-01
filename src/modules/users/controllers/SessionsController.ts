@@ -19,7 +19,19 @@ export class SessionsController {
       },
     });
 
-    return response.json(user);
+    if (!user) {
+      throw new AppError('User not found.');
+    }
+
+    const userWithoutPassword = {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      phone: user.phone,
+    };
+
+    return response.json(userWithoutPassword);
   }
 
   static async create(request: Request, response: Response): Promise<Response> {
@@ -32,8 +44,8 @@ export class SessionsController {
 
     const userWithoutPassword = {
       id: user.id,
-      firstName: user.first_name,
-      lastName: user.last_name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       phone: user.phone,
     };

@@ -15,11 +15,6 @@ export class NotesController {
       where: {
         project_id,
       },
-      select: {
-        id: true,
-        title: true,
-        updated_at: true,
-      },
     });
 
     return response.json(notes);
