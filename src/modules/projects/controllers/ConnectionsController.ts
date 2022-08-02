@@ -43,6 +43,6 @@ export class ConnectionsController {
 
     await DeleteConnectionService.execute({ user_id, id });
 
-    return response.json({ id });
+    return response.send().status(204);
   }
 }

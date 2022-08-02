@@ -72,6 +72,6 @@ export class NotesController {
 
     await DeleteNoteService.execute({ user_id, id });
 
-    return response.json({ id });
+    return response.send().status(204);
   }
 }

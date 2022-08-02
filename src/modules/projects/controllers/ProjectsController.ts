@@ -38,6 +38,6 @@ export class ProjectsController {
 
     await DeleteProjectService.execute({ id });
 
-    return response.json(true);
+    return response.send().status(204);
   }
 }
