@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { object, string } from 'yup';
 
+import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticated';
 import { Segments, validationMiddleware } from '@shared/middlewares/validation';
 
 import { UsersController } from '../controllers/UsersController';
@@ -20,6 +21,10 @@ usersRouter.post(
   }),
   UsersController.create,
 );
+
+usersRouter.use(ensureAuthenticated);
+
+usersRouter.get('/', UsersController.index);
 
 usersRouter.put(
   '/:id',

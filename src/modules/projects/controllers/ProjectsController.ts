@@ -24,6 +24,36 @@ export class ProjectsController {
     return response.json(projects);
   }
 
+  static async show(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const project = await prisma.project.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        _count: true,
+        id: true,
+        title: true,
+        members: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return response.json(project);
+  }
+
   static async create(request: Request, response: Response): Promise<Response> {
     const { user_id } = request;
     const { title } = request.body;

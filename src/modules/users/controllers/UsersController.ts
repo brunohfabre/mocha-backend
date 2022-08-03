@@ -1,9 +1,23 @@
 import { Request, Response } from 'express';
 
+import { prisma } from '@shared/prisma';
+
 import { CreateUserService } from '../services/CreateUserService';
 import { UpdateUserService } from '../services/UpdateUserService';
 
 export class UsersController {
+  static async index(request: Request, response: Response): Promise<Response> {
+    const { email } = request.query;
+
+    const users = await prisma.user.findMany({
+      where: {
+        email: email ? String(email) : undefined,
+      },
+    });
+
+    return response.json(users);
+  }
+
   static async create(request: Request, response: Response): Promise<Response> {
     const { first_name, last_name, email, password, phone } = request.body;
 
