@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+
+  memberIn Member[]
+}
+
+model AuthLink {
+  id        String   @id @default(uuid())
+  code      String
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model Workspace {
+  id   String @id @default(uuid())
+  name String
+
+  members Member[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  VIWER
+}
+
+model Member {
+  id          String @id @default(uuid())
+  role        Role
+  userId      String
+  workspaceId String
+
+  user      User      @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+model Wait {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
