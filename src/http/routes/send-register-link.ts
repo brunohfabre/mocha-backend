@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import z from 'zod'
 
+import { env } from '@/env'
 import { mail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
 
@@ -8,7 +9,7 @@ import { verifyJwt } from '../middlewares/verify-jwt'
 
 export async function sendRegisterLink(app: FastifyInstance) {
   app.post(
-    '/send-register-link',
+    '/register-link',
     { onRequest: [verifyJwt] },
     async (request, reply) => {
       const bodySchema = z.object({
@@ -27,6 +28,16 @@ export async function sendRegisterLink(app: FastifyInstance) {
         throw new Error('Not on waitlist.')
       }
 
+      const userFromEmail = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+      })
+
+      if (userFromEmail) {
+        throw new Error('User already exists.')
+      }
+
       const token = await reply.jwtSign(
         {
           sub: email,
@@ -43,10 +54,10 @@ export async function sendRegisterLink(app: FastifyInstance) {
         to: [email],
         subject: 'Welcome to your new project management',
         html: `
-        <div>
-          <p style="font-size: 16px;">Token to register: <strong>${token}</strong></p>
-        </div>
-      `,
+          <div>
+            <p style="font-size: 16px;">Link to register: <a href="${env.FRONTEND_URL}/sign-up?token=${token}">Click here</a></p>
+          </div>
+        `,
       })
 
       return reply.status(204).send()
