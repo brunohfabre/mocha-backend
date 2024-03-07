@@ -43,7 +43,7 @@ export async function register(app: FastifyInstance) {
             role: 'OWNER',
             workspace: {
               create: {
-                name: 'private',
+                name: 'Personal',
               },
             },
           },

@@ -12,7 +12,7 @@ async function main() {
           role: 'OWNER',
           workspace: {
             create: {
-              name: 'private',
+              name: 'Personal',
             },
           },
         },
