@@ -8,6 +8,7 @@ import { me } from './me'
 import { register } from './register'
 import { sendAuthLink } from './send-auth-link'
 import { sendRegisterLink } from './send-register-link'
+import { updateUser } from './update-user'
 
 export async function appRoutes(app: FastifyInstance) {
   app.register(authenticateFromLink)
@@ -16,6 +17,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.register(joinInWaitlist)
   app.register(sendRegisterLink)
   app.register(me)
+  app.register(updateUser)
 
   app.register(fetchWorkspaces)
   app.register(createWorkspace)
