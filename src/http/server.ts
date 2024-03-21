@@ -4,6 +4,7 @@ import { ZodError } from 'zod'
 import { env } from '@/env'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library'
 
 import { appRoutes } from './routes'
 
@@ -21,6 +22,10 @@ app.setErrorHandler((error, _, reply) => {
     return reply.status(400).send({
       message: error.flatten(),
     })
+  }
+
+  if (error instanceof PrismaClientInitializationError) {
+    return reply.status(502).send()
   }
 
   if (error instanceof Error) {

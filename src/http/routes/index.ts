@@ -2,13 +2,16 @@ import { FastifyInstance } from 'fastify'
 
 import { authenticateFromLink } from './authenticate-from-link'
 import { createWorkspace } from './create-workspace'
+import { deleteWorkspace } from './delete-workspace'
 import { fetchWorkspaces } from './fetch-workspaces'
+import { getWorkspace } from './get-workspace'
 import { joinInWaitlist } from './join-in-waitlist'
 import { me } from './me'
 import { register } from './register'
 import { sendAuthLink } from './send-auth-link'
 import { sendRegisterLink } from './send-register-link'
 import { updateUser } from './update-user'
+import { updateWorkspace } from './update-workspace'
 
 export async function appRoutes(app: FastifyInstance) {
   app.register(authenticateFromLink)
@@ -20,5 +23,8 @@ export async function appRoutes(app: FastifyInstance) {
   app.register(updateUser)
 
   app.register(fetchWorkspaces)
+  app.register(getWorkspace)
   app.register(createWorkspace)
+  app.register(updateWorkspace)
+  app.register(deleteWorkspace)
 }
