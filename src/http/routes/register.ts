@@ -41,9 +41,10 @@ export async function register(app: FastifyInstance) {
         memberIn: {
           create: {
             role: 'OWNER',
-            workspace: {
+            organization: {
               create: {
-                name: 'Personal',
+                name: `${name}'s Org`,
+                type: 'PERSONAL',
               },
             },
           },

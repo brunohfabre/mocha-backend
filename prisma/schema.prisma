@@ -23,9 +23,16 @@ model AuthLink {
   createdAt DateTime @default(now())
 }
 
-model Workspace {
-  id   String @id @default(uuid())
-  name String
+enum OrganizationType {
+  PERSONAL
+  COMPANY
+}
+
+model Organization {
+  id     String           @id @default(uuid())
+  name   String
+  type   OrganizationType
+  domain String?
 
   members Member[]
 }
@@ -37,13 +44,13 @@ enum Role {
 }
 
 model Member {
-  id          String @id @default(uuid())
-  role        Role
-  userId      String
-  workspaceId String
+  id             String @id @default(uuid())
+  role           Role
+  userId         String
+  organizationId String
 
-  user      User      @relation(fields: [userId], references: [id])
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model Wait {

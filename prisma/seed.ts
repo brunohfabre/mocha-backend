@@ -10,9 +10,10 @@ async function main() {
       memberIn: {
         create: {
           role: 'OWNER',
-          workspace: {
+          organization: {
             create: {
-              name: 'Personal',
+              name: "Coddee Co's Org",
+              type: 'PERSONAL',
             },
           },
         },

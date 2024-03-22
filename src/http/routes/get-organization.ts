@@ -5,8 +5,8 @@ import { prisma } from '@/lib/prisma'
 
 import { verifyJwt } from '../middlewares/verify-jwt'
 
-export async function getWorkspace(app: FastifyInstance) {
-  app.get('/workspaces/:id', { onRequest: [verifyJwt] }, async (request) => {
+export async function getOrganization(app: FastifyInstance) {
+  app.get('/organizations/:id', { onRequest: [verifyJwt] }, async (request) => {
     const paramsSchema = z.object({
       id: z.string().uuid().min(1),
     })
@@ -15,7 +15,7 @@ export async function getWorkspace(app: FastifyInstance) {
 
     const userId = request.user.sub
 
-    const workspaceFromIdAndUserId = await prisma.workspace.findFirst({
+    const organizationFromIdAndUserId = await prisma.organization.findFirst({
       where: {
         id,
         members: {
@@ -26,12 +26,12 @@ export async function getWorkspace(app: FastifyInstance) {
       },
     })
 
-    if (!workspaceFromIdAndUserId) {
-      throw new Error('Workspace not found')
+    if (!organizationFromIdAndUserId) {
+      throw new Error('Organization not found')
     }
 
     return {
-      workspace: workspaceFromIdAndUserId,
+      organization: organizationFromIdAndUserId,
     }
   })
 }

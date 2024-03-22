@@ -4,11 +4,11 @@ import { prisma } from '@/lib/prisma'
 
 import { verifyJwt } from '../middlewares/verify-jwt'
 
-export async function fetchWorkspaces(app: FastifyInstance) {
-  app.get('/workspaces', { onRequest: [verifyJwt] }, async (request) => {
+export async function fetchOrganizations(app: FastifyInstance) {
+  app.get('/organizations', { onRequest: [verifyJwt] }, async (request) => {
     const userId = request.user.sub
 
-    const workspaces = await prisma.workspace.findMany({
+    const organizations = await prisma.organization.findMany({
       where: {
         members: {
           every: {
@@ -19,7 +19,7 @@ export async function fetchWorkspaces(app: FastifyInstance) {
     })
 
     return {
-      workspaces,
+      organizations,
     }
   })
 }
