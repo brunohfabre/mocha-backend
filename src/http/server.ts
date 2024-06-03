@@ -8,11 +8,12 @@ import {
 
 import { env } from '@/env'
 import { errorHandler } from '@/http/error-handler'
-import { authenticateWithGithub } from '@/http/routes/auth/authenticate-with-github'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
+
+import { appRoutes } from './routes'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -24,9 +25,9 @@ app.setErrorHandler(errorHandler)
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'Next.js SaaS',
-      description: 'Full-stack SaaS with multi-tenant & RBAC.',
-      version: '1.0.0',
+      title: 'Mocha',
+      description: 'Free web http client',
+      version: '0.0.1',
     },
     components: {
       securitySchemes: {
@@ -51,7 +52,7 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCors)
 
-app.register(authenticateWithGithub)
+app.register(appRoutes)
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running!')

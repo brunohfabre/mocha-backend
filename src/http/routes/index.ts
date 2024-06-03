@@ -1,0 +1,22 @@
+import type { FastifyInstance } from 'fastify'
+
+import { authenticateWithGithub } from './auth/authenticate-with-github'
+import { getProfile } from './auth/get-profile'
+import { createOrganization } from './organizations/create-organization'
+import { deleteOrganization } from './organizations/delete-organization'
+import { getMembership } from './organizations/get-membership'
+import { getOrganization } from './organizations/get-organization'
+import { getOrganizations } from './organizations/get-organizations'
+import { updateOrganization } from './organizations/update-organization'
+
+export async function appRoutes(app: FastifyInstance) {
+  app.register(authenticateWithGithub)
+  app.register(getProfile)
+
+  app.register(createOrganization)
+  app.register(getMembership)
+  app.register(getOrganizations)
+  app.register(getOrganization)
+  app.register(updateOrganization)
+  app.register(deleteOrganization)
+}
