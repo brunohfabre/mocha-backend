@@ -4,6 +4,8 @@ import { ZodError } from 'zod'
 import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 
+import { UnauthenticatedError } from './routes/_errors/unauthenticated-error'
+
 type FastifyErrorHandler = FastifyInstance['errorHandler']
 
 export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
@@ -20,8 +22,14 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
     })
   }
 
-  if (error instanceof UnauthorizedError) {
+  if (error instanceof UnauthenticatedError) {
     reply.status(401).send({
+      message: error.message,
+    })
+  }
+
+  if (error instanceof UnauthorizedError) {
+    reply.status(403).send({
       message: error.message,
     })
   }

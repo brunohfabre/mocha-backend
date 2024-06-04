@@ -4,6 +4,8 @@ import { fastifyPlugin } from 'fastify-plugin'
 import { UnauthorizedError } from '@/http/routes/_errors/unauthorized-error'
 import { prisma } from '@/lib/prisma'
 
+import { UnauthenticatedError } from '../routes/_errors/unauthenticated-error'
+
 export const auth = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request) => {
     request.getCurrentUserId = async () => {
@@ -12,7 +14,7 @@ export const auth = fastifyPlugin(async (app: FastifyInstance) => {
 
         return sub
       } catch {
-        throw new UnauthorizedError('Invalid token')
+        throw new UnauthenticatedError('Invalid token')
       }
     }
 
