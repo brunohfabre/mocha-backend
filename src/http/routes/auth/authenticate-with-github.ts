@@ -25,6 +25,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
               email: z.string().min(1).email(),
               avatarUrl: z.string().nullable(),
             }),
+            needFinishSetup: z.boolean(),
           }),
         },
       },
@@ -130,6 +131,14 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         })
       }
 
+      const userMembershipsCount = await prisma.member.count({
+        where: {
+          userId: user.id,
+        },
+      })
+
+      const needFinishSetup = userMembershipsCount === 0
+
       const token = await reply.jwtSign(
         {
           sub: user.id,
@@ -141,7 +150,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         },
       )
 
-      return reply.status(201).send({ token, user })
+      return reply.status(201).send({ token, user, needFinishSetup })
     },
   )
 }

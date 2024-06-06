@@ -22,7 +22,6 @@ export async function getOrganizations(app: FastifyInstance) {
                 z.object({
                   id: z.string().min(1),
                   name: z.string(),
-                  avatarUrl: z.string().url().nullable(),
                   role: z.enum(['ADMIN', 'MEMBER']),
                 }),
               ),
@@ -37,7 +36,6 @@ export async function getOrganizations(app: FastifyInstance) {
           select: {
             id: true,
             name: true,
-            avatarUrl: true,
             members: {
               select: {
                 role: true,
