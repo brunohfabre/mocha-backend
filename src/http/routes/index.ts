@@ -2,6 +2,11 @@ import type { FastifyInstance } from 'fastify'
 
 import { authenticateWithGithub } from './auth/authenticate-with-github'
 import { getProfile } from './auth/get-profile'
+import { createCollection } from './collections/create-collection'
+import { deleteCollection } from './collections/delete-collection'
+import { getCollection } from './collections/get-collection'
+import { getCollections } from './collections/get-collections'
+import { updateCollection } from './collections/update-collection'
 import { createOrganization } from './organizations/create-organization'
 import { deleteOrganization } from './organizations/delete-organization'
 import { getMembership } from './organizations/get-membership'
@@ -19,4 +24,10 @@ export async function appRoutes(app: FastifyInstance) {
   app.register(getOrganization)
   app.register(updateOrganization)
   app.register(deleteOrganization)
+
+  app.register(createCollection)
+  app.register(getCollection)
+  app.register(getCollections)
+  app.register(updateCollection)
+  app.register(deleteCollection)
 }

@@ -87,8 +87,19 @@ model Organization {
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
-  invites Invite[]
-  members Member[]
+  invites     Invite[]
+  members     Member[]
+  collections Collection[]
 
   @@map("organizations")
+}
+
+model Collection {
+  id   String @id @default(cuid())
+  name String
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  @@map("collections")
 }
