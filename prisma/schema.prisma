@@ -87,11 +87,24 @@ model Organization {
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
-  invites     Invite[]
-  members     Member[]
-  collections Collection[]
+  invites        Invite[]
+  members        Member[]
+  documentations Documentation[]
+  collections    Collection[]
 
   @@map("organizations")
+}
+
+model Documentation {
+  id        String   @id @default(cuid())
+  name      String
+  fileUrl   String   @map("file_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  @@map("documentations")
 }
 
 model Collection {
