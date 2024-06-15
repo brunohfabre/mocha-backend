@@ -22,7 +22,7 @@ export async function getOrganizations(app: FastifyInstance) {
                 z.object({
                   id: z.string().min(1),
                   name: z.string(),
-                  role: z.enum(['ADMIN', 'MEMBER']),
+                  role: z.enum(['OWNER', 'ADMIN', 'MEMBER']),
                 }),
               ),
             }),

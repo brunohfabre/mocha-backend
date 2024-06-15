@@ -13,10 +13,10 @@ model User {
   name      String?
   email     String   @unique
   avatarUrl String?  @map("avatar_url")
+  code      String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  accounts          Account[]
   invites           Invite[]
   memberOn          Member[]
   ownsOrganizations Organization[]
@@ -24,23 +24,8 @@ model User {
   @@map("users")
 }
 
-enum AccountProvider {
-  GITHUB
-}
-
-model Account {
-  id                String          @id @default(cuid())
-  provider          AccountProvider
-  providerAccountId String          @unique @map("provider_account_id")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  @@unique([provider, userId])
-  @@map("accounts")
-}
-
 enum Role {
+  OWNER
   ADMIN
   MEMBER
 }

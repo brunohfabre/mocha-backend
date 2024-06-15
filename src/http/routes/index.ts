@@ -1,7 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 
-import { authenticateWithGithub } from './auth/authenticate-with-github'
+import { authenticateFromCode } from './auth/authenticate-from-code'
 import { getProfile } from './auth/get-profile'
+import { sendAuthenticationCode } from './auth/send-authentication-code'
 import { createCollection } from './collections/create-collection'
 import { deleteCollection } from './collections/delete-collection'
 import { getCollection } from './collections/get-collection'
@@ -20,7 +21,8 @@ import { getOrganizations } from './organizations/get-organizations'
 import { updateOrganization } from './organizations/update-organization'
 
 export async function appRoutes(app: FastifyInstance) {
-  app.register(authenticateWithGithub)
+  app.register(sendAuthenticationCode)
+  app.register(authenticateFromCode)
   app.register(getProfile)
 
   app.register(createOrganization)
