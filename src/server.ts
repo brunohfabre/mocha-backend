@@ -30,7 +30,17 @@ app.register(fastifySwagger, {
       version: '0.0.1',
     },
     servers: [],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
+
   transform: jsonSchemaTransform,
 })
 app.register(fastifySwaggerUi, {

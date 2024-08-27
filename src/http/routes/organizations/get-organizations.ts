@@ -4,13 +4,13 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { prisma } from '@/lib/prisma'
 import { verifyJwt } from '@/middlewares/verify-jwt'
 
-export async function getProfile(app: FastifyInstance) {
+export async function getOrganizations(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    '/me',
+    '/organizations',
     {
       schema: {
-        tags: ['Auth'],
-        summary: 'Get user',
+        tags: ['Organizations'],
+        summary: 'Get organizations',
         security: [
           {
             bearerAuth: [],
@@ -22,15 +22,19 @@ export async function getProfile(app: FastifyInstance) {
     async (request, reply) => {
       const userId = request.user.sub
 
-      const userFromId = await prisma.user.findFirst({
+      const organizationsFromUserId = await prisma.organization.findMany({
         where: {
-          id: userId,
+          members: {
+            some: {
+              userId,
+            },
+          },
         },
       })
 
-      return reply.send({
-        user: userFromId,
-      })
+      return {
+        organizations: organizationsFromUserId,
+      }
     },
   )
 }

@@ -13,4 +13,31 @@ model User {
   email     String   @unique
   avatarUrl String?
   createdAt DateTime @default(now())
+
+  membersIn Membership[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  VIEWER
+  BILLING
+}
+
+model Membership {
+  id   String @id @default(cuid())
+  role Role   @default(VIEWER)
+
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  members Membership[]
 }
