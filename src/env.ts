@@ -9,6 +9,8 @@ const envSchema = z.object({
     .default('development'),
 
   JWT_SECRET: z.string(),
+
+  RESEND_KEY: z.string(),
 })
 
 export const env = envSchema.parse(process.env)

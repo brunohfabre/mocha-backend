@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { prisma } from '@/lib/prisma'
+import { resend } from '@/lib/resend'
 
 export async function authenticate(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -35,7 +36,12 @@ export async function authenticate(app: FastifyInstance) {
           },
         })
 
-        // send email with code
+        await resend.emails.send({
+          from: 'Mocha <no-reply@coddee.co>',
+          to: [email],
+          subject: 'Verification code',
+          html: `<p>Your verification code is: <strong>${code}</strong></p>`,
+        })
 
         return
       }
@@ -51,7 +57,12 @@ export async function authenticate(app: FastifyInstance) {
         },
       })
 
-      // send email with code
+      await resend.emails.send({
+        from: 'Mocha <no-reply@coddee.co>',
+        to: [email],
+        subject: 'Verification code',
+        html: `<p>Your verification code is: <strong>${code}</strong></p>`,
+      })
 
       return reply.status(204).send()
     },
