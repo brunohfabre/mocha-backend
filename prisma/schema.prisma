@@ -9,9 +9,9 @@ datasource db {
 
 model User {
   id        String   @id @default(cuid())
-  name      String
+  name      String?
   email     String   @unique
-  avatarUrl String?
+  code      String?
   createdAt DateTime @default(now())
 
   membersIn Membership[]
@@ -19,14 +19,14 @@ model User {
 
 enum Role {
   OWNER
-  ADMIN
-  VIEWER
-  BILLING
+  MEMBER
 }
 
 model Membership {
-  id   String @id @default(cuid())
-  role Role   @default(VIEWER)
+  id         String   @id @default(cuid())
+  role       Role     @default(MEMBER)
+  acceptedAt DateTime
+  createdAt  DateTime @default(now())
 
   user           User         @relation(fields: [userId], references: [id])
   userId         String
