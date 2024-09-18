@@ -14,6 +14,7 @@ export async function createSession(app: FastifyInstance) {
         tags: ['Auth'],
         summary: 'Authenticate with code',
         body: z.object({
+          email: z.string().min(1),
           code: z.string().min(1),
         }),
         response: {
@@ -24,9 +25,13 @@ export async function createSession(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { code } = request.body
+      const { code, email } = request.body
 
-      const userFromEmail = await prisma.user.findFirst()
+      const userFromEmail = await prisma.user.findFirst({
+        where: {
+          email
+        }
+      })
 
       if (!userFromEmail) {
         throw new BadRequestError('User not exists.')
