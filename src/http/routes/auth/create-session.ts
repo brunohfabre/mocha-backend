@@ -12,7 +12,7 @@ export async function createSession(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with code',
+        summary: 'Create session',
         body: z.object({
           email: z.string().min(1),
           code: z.string().min(1),

@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { prisma } from '@/lib/prisma'
 import { verifyJwt } from '@/middlewares/verify-jwt'
+import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function getProfile(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -27,6 +28,11 @@ export async function getProfile(app: FastifyInstance) {
           id: userId,
         },
       })
+
+      if(!userFromId
+       ) {
+        throw new UnauthorizedError()
+       }
 
       return reply.send({
         user: userFromId,

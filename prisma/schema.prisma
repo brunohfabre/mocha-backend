@@ -63,6 +63,7 @@ model Organization {
   name      String
   slug      String   @unique
   domain    String?  @unique
+  personal  Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
 
   owner   User   @relation(fields: [ownerId], references: [id])
