@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { verifyJwt } from '@/middlewares/verify-jwt'
 
 export async function getOrganizations(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post(
+  app.withTypeProvider<ZodTypeProvider>().get(
     '/organizations',
     {
       onRequest: [verifyJwt],
