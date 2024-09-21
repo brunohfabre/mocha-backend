@@ -69,8 +69,50 @@ model Organization {
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
-  invites Invite[]
-  members Member[]
+  invites     Invite[]
+  members     Member[]
+  collections Collection[]
 
   @@map("organizations")
+}
+
+model Collection {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @map("organization_id")
+
+  requests Request[]
+
+  @@map("collections")
+}
+
+enum RequestType {
+  REQUEST
+  FOLDER
+}
+
+enum Method {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+}
+
+model Request {
+  id        String      @id @default(cuid())
+  name      String
+  type      RequestType
+  parentId  String?
+  url       String?
+  method    Method?
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+
+  @@map("requests")
 }
