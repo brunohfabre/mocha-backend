@@ -7,6 +7,7 @@ import { updateUser } from './users/update-user'
 import { createUserName } from './users/create-user-name'
 import { createRequest } from './requests/create-request'
 import { getOrganizations } from './organizations/get-organizations'
+import { getCollections } from './collections/get-collections'
 
 export async function routes(app: FastifyInstance) {
   app.register(authenticate)
@@ -18,6 +19,8 @@ export async function routes(app: FastifyInstance) {
   app.register(createUserName)
 
   app.register(getOrganizations)
+
+  app.register(getCollections)
 
   app.register(createRequest)
 }

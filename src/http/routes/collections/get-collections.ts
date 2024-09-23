@@ -6,7 +6,7 @@ import { verifyJwt } from '@/middlewares/verify-jwt'
 import { z } from 'zod'
 
 export async function getCollections(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post(
+  app.withTypeProvider<ZodTypeProvider>().get(
     '/organizations/:organizationId/collections',
     {
       onRequest: [verifyJwt],
