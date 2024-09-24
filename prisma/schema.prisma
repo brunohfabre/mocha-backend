@@ -108,7 +108,7 @@ model Request {
   type      RequestType
   parentId  String?
   url       String?
-  method    Method?
+  method    Method?     @default(GET)
   createdAt DateTime    @default(now()) @map("created_at")
 
   collection   Collection @relation(fields: [collectionId], references: [id])
