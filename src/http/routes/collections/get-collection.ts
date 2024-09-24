@@ -5,33 +5,33 @@ import { prisma } from '@/lib/prisma'
 import { verifyJwt } from '@/middlewares/verify-jwt'
 import { z } from 'zod'
 
-export async function getCollections(app: FastifyInstance) {
+export async function getCollection(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    '/organizations/:organizationId/collections',
+    '/organizations/:organizationId/collections/:id',
     {
       onRequest: [verifyJwt],
       schema: {
         tags: ['Collections'],
         summary: 'Get collections',
         params: z.object({
-          organizationId: z.string().min(1)
+          id: z.string().min(1)
         })
       },
     },
     async (request) => {
-     const { organizationId } = request.params
+     const { id } = request.params
 
-      const collections = await prisma.collection.findMany({
+      const collection = await prisma.collection.findFirst({
         where: {
-          organizationId
+          id
         },
-        orderBy: {
-          name: 'asc'
+        include: {
+          requests: true
         }
       })
 
       return {
-        collections,
+        collection,
       }
     },
   )

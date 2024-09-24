@@ -8,6 +8,9 @@ import { createUserName } from './users/create-user-name'
 import { createRequest } from './requests/create-request'
 import { getOrganizations } from './organizations/get-organizations'
 import { getCollections } from './collections/get-collections'
+import { createCollection } from './collections/create-collection'
+import { deleteCollection } from './collections/delete-collection'
+import { getCollection } from './collections/get-collection'
 
 export async function routes(app: FastifyInstance) {
   app.register(authenticate)
@@ -21,6 +24,9 @@ export async function routes(app: FastifyInstance) {
   app.register(getOrganizations)
 
   app.register(getCollections)
+  app.register(getCollection)
+  app.register(createCollection)
+  app.register(deleteCollection)
 
   app.register(createRequest)
 }
