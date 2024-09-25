@@ -12,6 +12,7 @@ import { createCollection } from './collections/create-collection'
 import { deleteCollection } from './collections/delete-collection'
 import { getCollection } from './collections/get-collection'
 import { deleteRequest } from './requests/delete-request'
+import { updateCollection } from './collections/update-collection'
 
 export async function routes(app: FastifyInstance) {
   app.register(authenticate)
@@ -27,6 +28,7 @@ export async function routes(app: FastifyInstance) {
   app.register(getCollections)
   app.register(getCollection)
   app.register(createCollection)
+  app.register(updateCollection)
   app.register(deleteCollection)
 
   app.register(createRequest)

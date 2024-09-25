@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 import { verifyJwt } from '@/middlewares/verify-jwt'
 import { BadRequestError } from '../_errors/bad-request-error'
 
-export async function createCollection(app: FastifyInstance) {
+export async function updateCollection(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put(
     '/organizations/:organizationId/collections/:collectionId',
     {
