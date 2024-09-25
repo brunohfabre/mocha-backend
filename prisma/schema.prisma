@@ -106,13 +106,13 @@ model Request {
   id        String      @id @default(cuid())
   name      String
   type      RequestType
-  parentId  String?
+  parentId  String?     @map("parent_id")
   url       String?
   method    Method?     @default(GET)
   createdAt DateTime    @default(now()) @map("created_at")
 
   collection   Collection @relation(fields: [collectionId], references: [id])
-  collectionId String
+  collectionId String     @map("collection_id")
 
   @@map("requests")
 }

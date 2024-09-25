@@ -18,19 +18,21 @@ export async function createRequest(app: FastifyInstance) {
         }),
         body: z.object({
           name: z.string().min(1).default('Untitled'),
-          type: z.enum(['REQUEST', 'FOLDER'])
+          type: z.enum(['REQUEST', 'FOLDER']),
+          parentId: z.string().optional()
         }),
       },
     },
     async (request) => {
       const { collectionId } = request.params
-      const { name, type } = request.body
+      const { name, type, parentId } = request.body
 
       const requestCreated = await prisma.request.create({
         data: {
           name,
           type,
-          collectionId
+          collectionId,
+          parentId
         },
       })
 
