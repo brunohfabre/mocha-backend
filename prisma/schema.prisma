@@ -111,7 +111,7 @@ model Request {
   method    Method?     @default(GET)
   createdAt DateTime    @default(now()) @map("created_at")
 
-  collection   Collection @relation(fields: [collectionId], references: [id])
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   collectionId String     @map("collection_id")
 
   @@map("requests")
