@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { prisma } from '@/lib/prisma'
 import { resend } from '@/lib/resend'
+import { CodeEmail } from 'emails/code'
 
 export async function authenticate(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -40,7 +41,7 @@ export async function authenticate(app: FastifyInstance) {
           from: 'Mocha <no-reply@coddee.co>',
           to: [email],
           subject: 'Verification code',
-          html: `<p>Your verification code is: <strong>${code}</strong></p>`,
+          react: CodeEmail({ code })
         })
 
         return
@@ -61,7 +62,7 @@ export async function authenticate(app: FastifyInstance) {
         from: 'Mocha <no-reply@coddee.co>',
         to: [email],
         subject: 'Verification code',
-        html: `<p>Your verification code is: <strong>${code}</strong></p>`,
+        react: CodeEmail({ code })
       })
 
       return reply.status(204).send()
