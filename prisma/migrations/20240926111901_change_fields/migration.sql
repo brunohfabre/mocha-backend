@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "requests" ALTER COLUMN "auth" DROP NOT NULL,
+ALTER COLUMN "auth_type" SET DEFAULT 'NONE',
+ALTER COLUMN "body" DROP NOT NULL;
