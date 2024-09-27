@@ -13,6 +13,7 @@ import { deleteCollection } from './collections/delete-collection'
 import { getCollection } from './collections/get-collection'
 import { deleteRequest } from './requests/delete-request'
 import { updateCollection } from './collections/update-collection'
+import { updateRequest } from './requests/update-request'
 
 export async function routes(app: FastifyInstance) {
   app.register(authenticate)
@@ -32,5 +33,6 @@ export async function routes(app: FastifyInstance) {
   app.register(deleteCollection)
 
   app.register(createRequest)
+  app.register(updateRequest)
   app.register(deleteRequest)
 }

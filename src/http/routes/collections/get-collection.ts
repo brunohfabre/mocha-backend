@@ -26,7 +26,11 @@ export async function getCollection(app: FastifyInstance) {
           id
         },
         include: {
-          requests: true
+          requests: {
+            orderBy: {
+              createdAt: 'asc'
+            }
+          }
         }
       })
 

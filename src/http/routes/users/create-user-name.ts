@@ -44,7 +44,7 @@ export async function createUserName(app: FastifyInstance) {
         strict: true
       })
 
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: {
           id,
         },
@@ -64,9 +64,14 @@ export async function createUserName(app: FastifyInstance) {
             }
           }
         },
+        include: {
+          organizations: true
+        }
       })
 
-      return reply.status(204).send()
+      return {
+        user: updatedUser
+      }
     },
   )
 }
