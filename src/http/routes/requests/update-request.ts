@@ -17,6 +17,7 @@ export async function updateRequest(app: FastifyInstance) {
           id: z.string().min(1),
         }),
         body: z.object({
+          name: z.string().optional(),
           method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']).optional(),
           url: z.string().optional(),
           bodyType: z.enum(['NONE', 'JSON']).optional(),
@@ -36,13 +37,14 @@ export async function updateRequest(app: FastifyInstance) {
     },
     async (request) => {
       const { id } = request.params
-      const { method, url, bodyType, body, authType, auth, headers, params } = request.body
+      const { name, method, url, bodyType, body, authType, auth, headers, params } = request.body
 
       const requestCreated = await prisma.request.update({
         where: {
           id
         },
         data: {
+          name,
           method,
           url,
           bodyType,
