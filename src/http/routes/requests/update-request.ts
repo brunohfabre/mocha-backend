@@ -21,9 +21,9 @@ export async function updateRequest(app: FastifyInstance) {
           method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']).optional(),
           url: z.string().optional(),
           bodyType: z.enum(['NONE', 'JSON']).optional(),
-          body: z.string().optional(),
+          body: z.any().optional(),
           authType: z.enum(['NONE', 'BEARER']).optional(),
-          auth: z.string().optional(),
+          auth: z.any().optional(),
           headers: z.array(z.object({
             name: z.string(),
             value: z.string(),
