@@ -31,6 +31,7 @@ export async function createRequest(app: FastifyInstance) {
         data: {
           name,
           type,
+          url: '',
           collectionId,
           parentId
         },
