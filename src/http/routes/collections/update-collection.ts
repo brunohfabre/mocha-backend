@@ -8,42 +8,43 @@ import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function updateCollection(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put(
-    '/organizations/:organizationId/collections/:collectionId',
+    '/organizations/:organizationId/collections/:id',
     {
       onRequest: [verifyJwt],
       schema: {
-        tags: ['Requests'],
-        summary: 'Create request',
+        tags: ['Collections'],
+        summary: 'Update collection',
         params: z.object({
           organizationId: z.string().min(1),
-          collectionId: z.string().min(1),
+          id: z.string().min(1),
         }),
         body: z.object({
-          name: z.string().min(1).default('Untitled'),
+          name: z.string().min(1).optional(),
+          environments: z.string().optional()
         }),
       },
     },
     async (request) => {
-      const { organizationId, collectionId } = request.params
-      const { name } = request.body
+      const { id } = request.params
+      const { name, environments } = request.body
 
       const collectionFromId = await prisma.collection.findFirst({
         where: {
-          id: collectionId
+          id
         }
       })
 
-      if(!collectionFromId) {
+      if (!collectionFromId) {
         throw new BadRequestError('Collection not exists')
       }
 
       await prisma.collection.update({
         where: {
-          id: collectionId
+          id
         },
         data: {
           name,
-          organizationId
+          environments,
         },
       })
     }

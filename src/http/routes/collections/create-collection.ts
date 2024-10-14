@@ -11,8 +11,8 @@ export async function createCollection(app: FastifyInstance) {
     {
       onRequest: [verifyJwt],
       schema: {
-        tags: ['Requests'],
-        summary: 'Create request',
+        tags: ['Collections'],
+        summary: 'Create collection',
         params: z.object({
           organizationId: z.string().min(1),
         }),
