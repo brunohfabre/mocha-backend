@@ -79,7 +79,7 @@ model Organization {
 model Collection {
   id           String   @id @default(cuid())
   name         String
-  environments Json?
+  environments Json
   createdAt    DateTime @default(now()) @map("created_at")
 
   organization   Organization @relation(fields: [organizationId], references: [id])

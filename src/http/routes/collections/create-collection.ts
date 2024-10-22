@@ -28,7 +28,11 @@ export async function createCollection(app: FastifyInstance) {
       const collection = await prisma.collection.create({
         data: {
           name,
-          organizationId
+          organizationId,
+          environments: {
+            environments: [],
+            variables: []
+          }
         },
       })
 
