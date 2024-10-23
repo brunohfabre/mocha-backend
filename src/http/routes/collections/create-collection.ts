@@ -31,7 +31,8 @@ export async function createCollection(app: FastifyInstance) {
           organizationId,
           environments: {
             environments: [],
-            variables: []
+            variables: [],
+            values: []
           }
         },
       })
