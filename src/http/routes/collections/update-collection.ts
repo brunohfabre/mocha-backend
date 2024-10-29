@@ -20,7 +20,7 @@ export async function updateCollection(app: FastifyInstance) {
         }),
         body: z.object({
           name: z.string().min(1).optional(),
-          environments: z.string().optional()
+          environments: z.any()
         }),
       },
     },
