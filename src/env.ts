@@ -11,6 +11,9 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
 
   RESEND_KEY: z.string(),
+
+  GITHUB_OAUTH_CLIENT_ID: z.string(),
+  GITHUB_OAUTH_CLIENT_SECRET: z.string(),
 })
 
 export const env = envSchema.parse(process.env)

@@ -2,9 +2,8 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { getAccessTokenFromCode, getUserFromAccessToken } from '@/modules/github'
 import { prisma } from '@/lib/prisma'
-import { resend } from '@/lib/resend'
-import { CodeEmail } from 'emails/code'
 
 export async function authenticate(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -14,58 +13,49 @@ export async function authenticate(app: FastifyInstance) {
         tags: ['Auth'],
         summary: 'Authenticate',
         body: z.object({
-          email: z.string().email(),
+          code: z.string()
         }),
       },
     },
     async (request, reply) => {
-      const { email } = request.body
+      const { code } = request.body
 
-      const userFromEmail = await prisma.user.findFirst({
+      const accessToken = await getAccessTokenFromCode(code)
+      const githubUser = await getUserFromAccessToken(accessToken)
+
+      let userFromEmail = await prisma.user.findFirst({
         where: {
-          email,
-        },
+          email: githubUser.email
+        }
       })
 
       if (!userFromEmail) {
-        const code = crypto.randomUUID()
-
-        await prisma.user.create({
+        userFromEmail = await prisma.user.create({
           data: {
-            email,
-            code,
-          },
+            name: githubUser.name,
+            email: githubUser.email,
+            avatarUrl: githubUser.avatar_url,
+            githubId: githubUser.id
+          }
         })
-
-        await resend.emails.send({
-          from: 'Mocha <no-reply@coddee.co>',
-          to: [email],
-          subject: 'Verification code',
-          react: CodeEmail({ code })
-        })
-
-        return
       }
 
-      const code = crypto.randomUUID()
+      if (!userFromEmail.githubId) {
+        await prisma.user.update({
+          where: {
+            id: userFromEmail.id,
+          },
+          data: {
+            name: githubUser.name,
+            avatarUrl: githubUser.avatar_url,
+            githubId: githubUser.id
+          }
+        })
+      }
 
-      await prisma.user.update({
-        where: {
-          id: userFromEmail.id,
-        },
-        data: {
-          code,
-        },
-      })
+      const token = 'asdasdasd'
 
-      await resend.emails.send({
-        from: 'Mocha <no-reply@coddee.co>',
-        to: [email],
-        subject: 'Verification code',
-        react: CodeEmail({ code })
-      })
-
-      return reply.status(204).send()
+      return reply.send({ token })
     },
   )
 }
