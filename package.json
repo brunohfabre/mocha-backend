@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:debug": "tsx --inspect-brk src/server.ts",
     "build": "tsup src --out-dir dist",
     "start": "node dist/server.js"
   },

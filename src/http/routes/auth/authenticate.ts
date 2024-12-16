@@ -41,7 +41,7 @@ export async function authenticate(app: FastifyInstance) {
       }
 
       if (!userFromEmail.githubId) {
-        await prisma.user.update({
+        userFromEmail = await prisma.user.update({
           where: {
             id: userFromEmail.id,
           },
@@ -53,9 +53,18 @@ export async function authenticate(app: FastifyInstance) {
         })
       }
 
-      const token = 'asdasdasd'
+      const token = await reply.jwtSign(
+        {
+          sub: userFromEmail.id,
+        },
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        },
+      )
 
-      return reply.send({ token })
+      return reply.send({ token, user: userFromEmail })
     },
   )
 }
