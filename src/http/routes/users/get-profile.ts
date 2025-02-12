@@ -1,5 +1,5 @@
 import { verifyJwt } from '@/http/middlewares/verify-jwt'
-import { getUser } from '@/use-cases/authenticate-from-github-code copy'
+import { getUser } from '@/use-cases/getUser'
 import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
