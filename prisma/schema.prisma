@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  avatarUrl String?  @map("avatar_url")
+  githubId  Int?     @map("github_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  invites       Invite[]
+  memberOn      Member[]
+  organizations Organization[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+  BILLING
+}
+
+model Invite {
+  id        String   @id @default(uuid())
+  email     String
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String? @map("author_id")
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String       @map("organization_id")
+
+  @@unique([email, organizationId])
+  @@index([email])
+  @@map("invites")
+}
+
+model Member {
+  id   String @id @default(uuid())
+  role Role   @default(MEMBER)
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String       @map("organization_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@unique([organizationId, userId])
+  @@map("members")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  domain    String?  @unique
+  personal  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+
+  invites     Invite[]
+  members     Member[]
+  collections Collection[]
+
+  @@map("organizations")
+}
+
+model Collection {
+  id           String   @id @default(cuid())
+  name         String
+  environments Json
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String       @map("organization_id")
+
+  requests Request[]
+
+  @@map("collections")
+}
+
+enum RequestType {
+  REQUEST
+  FOLDER
+}
+
+enum Method {
+  GET
+  POST
+  PUT
+  PATCH
+  DELETE
+}
+
+enum BodyType {
+  NONE
+  JSON
+}
+
+enum AuthType {
+  NONE
+  BEARER
+}
+
+model Request {
+  id        String      @id @default(cuid())
+  name      String
+  type      RequestType
+  method    Method?     @default(GET)
+  url       String?
+  bodyType  BodyType    @default(NONE) @map("body_type")
+  body      Json?
+  authType  AuthType    @default(NONE) @map("auth_type")
+  auth      Json?
+  headers   Json[]
+  params    Json[]
+  parentId  String?     @map("parent_id")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at")
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String     @map("collection_id")
+
+  @@map("requests")
+}
