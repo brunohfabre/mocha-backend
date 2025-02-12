@@ -8,7 +8,7 @@ interface AccessTokenResponse {
 
 export interface GetUserResponse {
   id: number
-  name: string | null
+  name: string
   email: string
   avatar_url: string
 }

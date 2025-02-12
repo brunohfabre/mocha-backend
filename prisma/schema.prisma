@@ -9,10 +9,10 @@ datasource db {
 
 model User {
   id        String   @id @default(cuid())
-  name      String?
+  name      String
   email     String   @unique
   avatarUrl String?  @map("avatar_url")
-  githubId  Int?     @map("github_id")
+  githubId  Int      @map("github_id")
   createdAt DateTime @default(now()) @map("created_at")
 
   invites       Invite[]
@@ -60,12 +60,15 @@ model Member {
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  domain    String?  @unique
-  personal  Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
+  id                        String   @id @default(cuid())
+  name                      String
+  slug                      String   @unique
+  domain                    String?  @unique
+  shouldAttachUsersByDomain Boolean  @default(false) @map("should_attach_users_by_domain")
+  avatarUrl                 String?  @map("avatar_url")
+  personal                  Boolean  @default(false)
+  createdAt                 DateTime @default(now()) @map("created_at")
+  updatedAt                 DateTime @updatedAt @map("updated_at")
 
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
