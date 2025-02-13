@@ -1,3 +1,5 @@
+import { writeFile } from 'node:fs/promises'
+import path from 'node:path'
 import { fastifyCors } from '@fastify/cors'
 import { fastifySwagger } from '@fastify/swagger'
 import { fastifySwaggerUi } from '@fastify/swagger-ui'
@@ -46,3 +48,15 @@ app.register(appRoutes)
 app.listen({ port: 3333 }).then(() => {
   console.log('HTTP server running!')
 })
+
+if (env.NODE_ENV === 'development') {
+  const specFile = path.resolve(__dirname, '../../swagger.json')
+
+  app.ready().then(() => {
+    const spec = JSON.stringify(app.swagger(), null, 2)
+
+    writeFile(specFile, spec).then(() => {
+      console.log('Swagger spec generated.')
+    })
+  })
+}
