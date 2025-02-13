@@ -15,6 +15,7 @@ export async function getProfileRoute(app: FastifyInstance) {
         summary: 'Get authenticated user profile',
         response: {
           200: z.object({
+            token: z.string(),
             user: z.object({
               id: z.string(),
               name: z.string().nullable(),
@@ -28,9 +29,10 @@ export async function getProfileRoute(app: FastifyInstance) {
     async (request, reply) => {
       const userId = request.user.sub
 
-      const { user } = await getUser({ userId })
+      const { token, user } = await getUser({ userId })
 
       return reply.send({
+        token,
         user,
       })
     }

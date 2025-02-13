@@ -1,5 +1,6 @@
 import { BadRequestError } from '@/http/errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
+import { authenticateUser } from '@/modules/auth'
 
 interface GetUserRequest {
   userId: string
@@ -16,5 +17,9 @@ export async function getUser({ userId }: GetUserRequest) {
     throw new BadRequestError()
   }
 
-  return { user }
+  const { token } = await authenticateUser({
+    userId,
+  })
+
+  return { token, user }
 }
