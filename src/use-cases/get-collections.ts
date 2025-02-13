@@ -1,22 +1,19 @@
-import { BadRequestError } from '@/http/errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
+import { getUserMembership } from '@/modules/auth'
 
 interface GetCollectionsRequest {
+  userId: string
   organizationId: string
 }
 
 export async function getCollections({
+  userId,
   organizationId,
 }: GetCollectionsRequest) {
-  const organization = await prisma.organization.findFirst({
-    where: {
-      id: organizationId,
-    },
+  await getUserMembership({
+    userId,
+    organizationId,
   })
-
-  if (!organization) {
-    throw new BadRequestError()
-  }
 
   const collections = await prisma.collection.findMany({
     where: {

@@ -29,9 +29,10 @@ export async function getCollectionsRoute(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
+      const userId = request.user.sub
       const { organizationId } = request.params
 
-      const { collections } = await getCollections({ organizationId })
+      const { collections } = await getCollections({ userId, organizationId })
 
       return reply.send({
         collections,
