@@ -14,6 +14,7 @@ model User {
   avatarUrl String?  @map("avatar_url")
   githubId  Int      @map("github_id")
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   invites       Invite[]
   memberOn      Member[]
@@ -46,8 +47,10 @@ model Invite {
 }
 
 model Member {
-  id   String @id @default(uuid())
-  role Role   @default(MEMBER)
+  id        String   @id @default(uuid())
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String       @map("organization_id")
@@ -85,6 +88,7 @@ model Collection {
   name         String
   environments Json
   createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String       @map("organization_id")
