@@ -26,6 +26,13 @@ export async function getRequestsRoute(app: FastifyInstance) {
                 type: z.string(),
                 method: z.string().nullable(),
                 url: z.string().nullable(),
+                bodyType: z.enum(['NONE', 'JSON']),
+                body: z.string().nullable(),
+                authType: z.enum(['NONE', 'BEARER']),
+                auth: z.string().nullable(),
+                headers: z.array(z.string()),
+                params: z.array(z.string()),
+                parentId: z.string().nullable(),
               })
             ),
           }),

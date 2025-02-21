@@ -7,6 +7,7 @@ import { getCollectionsRoute } from './collections/get-collections'
 import { getOrganizationsRoute } from './organizations/get-organizations'
 import { createRequestRoute } from './requests/create-request'
 import { getRequestsRoute } from './requests/get-requests'
+import { updateRequestRoute } from './requests/update-request'
 import { getProfileRoute } from './users/get-profile'
 
 export async function appRoutes(app: FastifyInstance) {
@@ -23,4 +24,5 @@ export async function appRoutes(app: FastifyInstance) {
 
   app.register(getRequestsRoute)
   app.register(createRequestRoute)
+  app.register(updateRequestRoute)
 }

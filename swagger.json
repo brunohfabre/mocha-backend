@@ -443,6 +443,44 @@
                           "url": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "bodyType": {
+                            "type": "string",
+                            "enum": [
+                              "NONE",
+                              "JSON"
+                            ]
+                          },
+                          "body": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "authType": {
+                            "type": "string",
+                            "enum": [
+                              "NONE",
+                              "BEARER"
+                            ]
+                          },
+                          "auth": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "headers": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "params": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "parentId": {
+                            "type": "string",
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -450,7 +488,14 @@
                           "name",
                           "type",
                           "method",
-                          "url"
+                          "url",
+                          "bodyType",
+                          "body",
+                          "authType",
+                          "auth",
+                          "headers",
+                          "params",
+                          "parentId"
                         ],
                         "additionalProperties": false
                       }
@@ -525,6 +570,204 @@
                         "type",
                         "method",
                         "url"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "request"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{organizationId}/collections/{collectionId}/requests/{requestId}": {
+      "post": {
+        "operationId": "updateRequest",
+        "summary": "Update request",
+        "tags": [
+          "Requests"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "method": {
+                    "type": "string",
+                    "enum": [
+                      "GET",
+                      "POST",
+                      "PUT",
+                      "PATCH",
+                      "DELETE"
+                    ]
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "bodyType": {
+                    "type": "string",
+                    "enum": [
+                      "NONE",
+                      "JSON"
+                    ]
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "authType": {
+                    "type": "string",
+                    "enum": [
+                      "NONE",
+                      "BEARER"
+                    ]
+                  },
+                  "auth": {
+                    "type": "string"
+                  },
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "params": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "parentId": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "organizationId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "collectionId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "requestId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "request": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "method": {
+                          "type": "string",
+                          "enum": [
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "PATCH",
+                            "DELETE"
+                          ],
+                          "nullable": true
+                        },
+                        "url": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "bodyType": {
+                          "type": "string",
+                          "enum": [
+                            "NONE",
+                            "JSON"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "authType": {
+                          "type": "string",
+                          "enum": [
+                            "NONE",
+                            "BEARER"
+                          ]
+                        },
+                        "auth": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "headers": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "params": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "parentId": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type",
+                        "method",
+                        "url",
+                        "bodyType",
+                        "body",
+                        "authType",
+                        "auth",
+                        "headers",
+                        "params",
+                        "parentId"
                       ],
                       "additionalProperties": false
                     }
